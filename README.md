@@ -5,3 +5,4 @@ This is a repository for Telegram bot that will be developed during Intel Academ
 ## Set up requirements
 
 `python3 -m pip install python-telegram-bot`
+

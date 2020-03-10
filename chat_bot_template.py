@@ -1,9 +1,9 @@
 import logging
-
-from setup import PROXY, TOKEN
+import threading
 from telegram import Bot, Update
 from telegram.ext import CallbackContext, CommandHandler, Filters, MessageHandler, Updater
 
+from setup import PROXY, TOKEN
 from database import save_to_mongo, DatabaseUnavaliable
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -11,10 +11,6 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
-LOG_ACTIONS = []
-
-# Define a few command handlers. These usually take the two arguments update and
-# context. Error handlers also receive the raised TelegramError object in error.
 
 def overall_logging(handler):
     def inner(*args, **kwargs):
@@ -34,6 +30,7 @@ def overall_logging(handler):
                 }
             }
             try:
+                # TODO: implement multithreading for logging
                 save_result = save_to_mongo(log_info)
                 logger.info(f'Logs saved: {save_result.inserted_id}')
                 logger.info(f'function: {handler.__name__}')
